@@ -39,6 +39,8 @@ class BinanceFuturesClient:
         
         self._ws_id = 1
         self._ws = None
+        
+        self._break_point = False
 
         t = threading.Thread(target = self._start_ws)
         t.start()
@@ -192,13 +194,13 @@ class BinanceFuturesClient:
                                                   on_close  = self._on_close, 
                                                   on_error = self._on_error, 
                                                   on_message = self._on_message)
-        while True:
+        while not self._break_point:
             try:
                 self._ws.run_forever()
             except Exception as e:
                 logger.error("Binance error in run_forever method: %s", e) 
             time.sleep(2)
-    
+
     def _on_open(self, ws):
         logger.info("Binance connection opened.")
 

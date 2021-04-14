@@ -3,6 +3,9 @@ import logging
 import pprint
 
 from connectors.binance_futures import BinanceFuturesClient
+
+from interface.root_component import Root
+
 from SECRET import *
 
 logger = logging.getLogger()
@@ -39,9 +42,10 @@ if __name__ == "__main__":
 
     calibri_font = ("Calibri", 11, "normal")
 
-    root = tk.Tk()
+    root = Root()
 
 
     root.mainloop()
+    binance_client._break_point = True
     binance_client._ws.close()
 
