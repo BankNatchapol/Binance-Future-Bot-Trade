@@ -42,7 +42,6 @@ if __name__ == "__main__":
     root = tk.Tk()
 
 
-
     root.mainloop()
-
+    binance_client.ws.close()
 
