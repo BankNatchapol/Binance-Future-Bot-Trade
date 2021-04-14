@@ -2,7 +2,7 @@ import tkinter as tk
 import logging
 import pprint
 
-from binance_futures import BinanceFuturesClient
+from connectors.binance_futures import BinanceFuturesClient
 from SECRET import *
 
 logger = logging.getLogger()
