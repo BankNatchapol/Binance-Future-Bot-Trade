@@ -7,14 +7,20 @@ from urllib.parse import urlencode
 import hmac 
 import hashlib
 
+import websocket
+
+import threading 
+
 logger = logging.getLogger()
 
 class BinanceFuturesClient:
     def __init__(self, public_key, secret_key, testnet):
         if testnet:
             self.base_url = "https://testnet.binancefuture.com"
+            self.wss_url = "wss://stream.binancefuture.com/ws"
         else: 
             self.base_url = "https://fapi.binance.com"
+            self.wss_url = "wss://fstream.binance.com/ws"
         
         self.public_key = public_key
         self.secret_key = secret_key
@@ -23,6 +29,11 @@ class BinanceFuturesClient:
 
         self.prices = dict()
         
+        self.id = 1
+
+        t = threading.Thread(target = self.start_ws)
+        t.start()
+
         logger.info("Binance Futures Client successfully initialized.")
     
     def generate_signature(self, data):
@@ -32,9 +43,9 @@ class BinanceFuturesClient:
         if method == "GET":
             response = requests.get(self.base_url + endpoint, params = data, headers = self.headers)
         elif method == "POST":
-            response = requests.get(self.base_url + endpoint, params = data, headers = self.headers)
+            response = requests.post(self.base_url + endpoint, params = data, headers = self.headers)
         elif method == "DELETE":
-            response = requests.get(self.base_url + endpoint, params = data, headers = self.headers)
+            response = requests.delete(self.base_url + endpoint, params = data, headers = self.headers)
         else:
             raise ValueError()
         
@@ -91,7 +102,6 @@ class BinanceFuturesClient:
         data['signature'] = self.generate_signature(data)
 
         balances = dict()
-
         account_data = self.make_request("GET", "/fapi/v1/account", data)
 
         if account_data is not None:
@@ -143,3 +153,28 @@ class BinanceFuturesClient:
 
         return order_status
     
+    def start_ws(self):
+        ws = websocket.WebSocketApp(self.wss_url, on_open = self.on_open, 
+                                                  on_close  = self.on_close, 
+                                                  on_error = self.on_error, 
+                                                  on_message = self.on_message)
+        ws.run_forever()
+    
+    def on_open(self, ws):
+        logger.info("Binance connection opened.")
+    
+    def on_close(self, ws):
+        logger.warning("Binance connection closed.")
+
+    def on_error(self, ws, msg):
+        logger.error("Binance connection errorL: %s", msg)
+
+    def on_message(self, ws, msg):
+        print(msg)
+
+    def subscribe_channel(self, symbol):
+        data = dict()
+        data['method'] = "SUBSCRIBE"
+        data['params'] = []
+        data['params'].append(symbol.lower() + "@bookTicker")
+        data['id'] = self.id
