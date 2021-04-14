@@ -28,7 +28,7 @@ if __name__ == "__main__":
     # print(PUBLIC_KEY, SECRET_KEY)
     binance_client = BinanceFuturesClient(PUBLIC_KEY, SECRET_KEY, True)
     
-    # pprint.pprint(binance_client.get_balance())
+    # pprint.pprint(binance_client.get_balances())
     # print()
     # order = binance_client.place_order("BTCUSDT", "BUY", 0.01, "LIMIT", 20000, "GTC")
     # pprint.pprint(order)
@@ -43,5 +43,5 @@ if __name__ == "__main__":
 
 
     root.mainloop()
-    binance_client.ws.close()
+    binance_client._ws.close()
 
