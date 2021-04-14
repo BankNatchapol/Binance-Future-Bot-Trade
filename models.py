@@ -1,7 +1,7 @@
 class Balance:
     def __init__(self, info):
         self.initial_margin = float(info['initialMargin'])
-        self.maintenance_margin = float(info['mainMargin'])
+        self.maintenance_margin = float(info['maintMargin'])
         self.margin_balance = float(info['marginBalance'])
         self.wallet_balance = float(info['walletBalance'])
         self.unrealized_pnl = float(info['unrealizedProfit'])
@@ -16,7 +16,7 @@ class Candle:
         self.volume = float(candle_info[5])
 
 class Contract:
-    def __init__(self, contract_info):
+    def __init__(self, contract_info, exchange):
         self.symbol = contract_info['symbol']
         self.base_asset = contract_info['baseAsset']
         self.quote_asset = contract_info['quoteAsset']

@@ -36,6 +36,8 @@ class BinanceFuturesClient:
         self.balances = self.get_balances()
 
         self.prices = dict()
+
+        self.logs = list()
         
         self._ws_id = 1
         self._ws = None
@@ -47,6 +49,10 @@ class BinanceFuturesClient:
 
         logger.info("Binance Futures Client successfully initialized.")
     
+    def _add_log(self, msg: str):
+        logger.info("%s", msg)
+        self.logs.append({"log": msg, "displayed": False})
+
     def _generate_signature(self, data: typing.Dict) -> str:
         return hmac.new(self._secret_key.encode(), urlencode(data).encode(), hashlib.sha256).hexdigest()
     
@@ -56,25 +62,25 @@ class BinanceFuturesClient:
                 response = requests.get(self._base_url + endpoint, params = data, headers = self._headers)
             except Exception as e:
                 logger.error("Connection error while making %s request to %s: %s", method, endpoint, e)     
-            return None  
+                return None  
 
         elif method == "POST":
             try:
                 response = requests.post(self._base_url + endpoint, params = data, headers = self._headers)
             except Exception as e:
                 logger.error("Connection error while making %s request to %s: %s", method, endpoint, e) 
-            return None
+                return None
 
         elif method == "DELETE":
             try:
                 response = requests.delete(self._base_url + endpoint, params = data, headers = self._headers)
             except Exception as e:
                 logger.error("Connection error while making %s request to %s: %s", method, endpoint, e) 
-            return None
+                return None
 
         else:
             raise ValueError()
-        
+
         if response.status_code == 200:
             return response.json()
         else: 
@@ -84,12 +90,11 @@ class BinanceFuturesClient:
 
     def get_contracts(self) -> typing.Dict[str, Contract]:
         exchange_info = self._make_request("GET", "/fapi/v1/exchangeInfo", dict())
-
         contracts = dict()
         
         if exchange_info is not None:
             for contract_data in exchange_info['symbols']:
-                contracts[contract_data['pair']] = Contract(contract_data)
+                contracts[contract_data['symbol']] = Contract(contract_data, "Binance Futures")
 
         return contracts
 
@@ -130,7 +135,7 @@ class BinanceFuturesClient:
 
         balances = dict()
         account_data = self._make_request("GET", "/fapi/v1/account", data)
-
+ 
         if account_data is not None:
             for a in account_data['assets']:
                 balances[a['asset']] = Balance(a)

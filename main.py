@@ -28,24 +28,13 @@ logger.addHandler(stream_handler)
 # logger.error("Using for helping debug error.")
 
 if __name__ == "__main__":
-    # print(PUBLIC_KEY, SECRET_KEY)
-    binance_client = BinanceFuturesClient(PUBLIC_KEY, SECRET_KEY, True)
+
+    binance_f = BinanceFuturesClient(PUBLIC_KEY, SECRET_KEY, True)
     
-    # pprint.pprint(binance_client.get_balances())
-    # print()
-    # order = binance_client.place_order("BTCUSDT", "BUY", 0.01, "LIMIT", 20000, "GTC")
-    # pprint.pprint(order)
-    # print()
-    # pprint.pprint(binance_client.get_order_status("BTCUSDT", order['orderId']))
-    # print()
-    # pprint.pprint(binance_client.cancel_order("BTCUSDT", order['orderId']))
-
-    calibri_font = ("Calibri", 11, "normal")
-
-    root = Root()
-
+    root = Root(binance_f)
 
     root.mainloop()
-    binance_client._break_point = True
-    binance_client._ws.close()
+
+    binance_f._break_point = True
+    binance_f._ws.close()
 
