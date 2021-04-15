@@ -27,7 +27,7 @@ class TradesWatch(tk.Frame):
         
         self._body_index = 1
     
-    def add_trade(self, data: typing.Dict[])
+    def add_trade(self, data: typing.Dict):
         b_index = self._body_index
 
         t_index = data['time']
