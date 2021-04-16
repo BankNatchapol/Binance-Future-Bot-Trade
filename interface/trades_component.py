@@ -21,7 +21,7 @@ class TradesWatch(tk.Frame):
 
         self._headers_frame = tk.Frame(self._table_frame, bg = BG_COLOR)
 
-        self._col_width = 12
+        self._col_width = 13
 
         for idx, h in enumerate(self._headers):
             header = tk.Label(self._headers_frame, text = h.capitalize() if h != "remove" else "", 

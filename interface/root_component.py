@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter.messagebox import askquestion
+
 import time 
 
 from connectors.binance_futures import BinanceFuturesClient
@@ -20,6 +22,7 @@ class Root(tk.Tk):
         self.binance_f = binance_f
 
         self.title("Trading Bot")
+        self.protocol("WH_DELETE_WINDOW", self._ask_before_close)
 
         self.configure(bg = BG_COLOR)
 
@@ -42,6 +45,9 @@ class Root(tk.Tk):
         self._trades_frame.pack(side = tk.TOP)
 
         self._update_ui()
+
+    def _ask_before_close(self):
+
 
     def _update_ui(self):
         for log in self.binance_f.logs:

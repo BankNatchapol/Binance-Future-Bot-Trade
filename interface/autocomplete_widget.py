@@ -29,7 +29,7 @@ class Autocomplete(tk.Entry):
         else:
             if not self._lb_open:
                 self._lb = tk.Listbox(height = 8)
-                self._lb.place(x = self.winfo_x() + self.winfo_width() * 2 - 29 , y = self.winfo_y() + self.winfo_height())
+                self._lb.place(x = self.winfo_x() + self.winfo_width() * 2 - 29 , y = self.winfo_y() + self.winfo_height() + 45)
 
                 self._lb_open = True
 
