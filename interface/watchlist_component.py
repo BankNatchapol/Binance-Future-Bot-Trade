@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkmacosx as tkmac
 import typing
 
 from models import *
@@ -16,10 +17,10 @@ class WatchList(tk.Frame):
         self._table_frame = tk.Frame(self, bg = BG_COLOR)
         self._table_frame.pack(side = tk.TOP)
 
-        self._binance_f_label = tk.Label(self._commands_frame, text = "Binance Future", bg = BG_COLOR, fg = FG_COLOR, font = BOLD_FONT)
+        self._binance_f_label = tk.Label(self._commands_frame, text = "Binancefutures", bg = BG_COLOR, fg = FG_COLOR, font = BOLD_FONT)
         self._binance_f_label.grid(row = 0, column = 0)
 
-        self._binance_f_entry = tk.Entry(self._commands_frame, fg = FG_COLOR, justify = tk.CENTER, insertbackground = FG_COLOR, bg = BG_COLOR2)
+        self._binance_f_entry = tk.Entry(self._commands_frame, fg = FG_COLOR, justify = tk.CENTER, insertbackground = FG_COLOR, bg = BG_COLOR2, highlightthickness = False)
         self._binance_f_entry.bind("<Return>", self._add_binance_f_symbol)
         self._binance_f_entry.grid(row = 1, column = 0)
         
@@ -48,7 +49,7 @@ class WatchList(tk.Frame):
         symbol = event.widget.get()
         
         if symbol in self.binance_symbols:
-            self._add_symbol(symbol, "Binance Futures")
+            self._add_symbol(symbol, "Binancefutures")
             event.widget.delete(0, tk.END)
 
     def _add_symbol(self, symbol: str, exchange: str):
@@ -72,7 +73,7 @@ class WatchList(tk.Frame):
                                                     bg = BG_COLOR, fg = FG_COLOR2, font = GLOBAL_FONT)
         self.body_widgets['ask'][b_index].grid(row = b_index, column = 3)
 
-        self.body_widgets['remove'][b_index] = tk.Button(self._table_frame, text = "X", 
+        self.body_widgets['remove'][b_index] = tkmac.Button(self._table_frame, text = "X", borderless = True,
                                                         bg = "darkred", fg = FG_COLOR, font = GLOBAL_FONT, 
                                                         command = lambda : self._remove_symbol(b_index))
         self.body_widgets['remove'][b_index].grid(row = b_index, column = 4)

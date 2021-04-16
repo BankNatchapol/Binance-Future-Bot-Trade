@@ -48,12 +48,35 @@ class Root(tk.Tk):
             if not log['displayed']:
                 self.logging_frame.add_log(log['log'])
                 log['displayed'] = True
+
+        for client in [self.binance_f]:
+            try: 
+                for b_index, strat in client.strategies.items():
+                    for log in strat.logs:
+                        self.logging_frame.add_log(log['log'])
+                        log['displayed'] = True
+                    for trade in strat.trades:
+                        if trade.time not in self._trades_frame.body_widgets['symbol']:
+                            self._trades_frame.add_trade(trade)
+                        
+                        if trade.contract.exchange == "Binancefutures":
+                            precision = trade.contract.price_decimals 
+                        else:
+                            precision = 8
+                        
+                        
+                        pnl_str = "{0:.{prec}f}".format(trade.pnl, prec = precision)
+                        self._trades_frame.body_widgets['pnl_var'][trade.time].set(pnl_str)
+                        self._trades_frame.body_widgets['status_var'][trade.time].set(trade.status.capitalize())
+
+            except RuntimeError as e:
+                logger.error("Error while lopping through strategies dictionary: %s", e)
         try:
             for key, value in self._watchlist_frame.body_widgets['symbol'].items():
                 symbol = self._watchlist_frame.body_widgets['symbol'][key].cget("text")
                 exchange = self._watchlist_frame.body_widgets['exchange'][key].cget("text")
 
-                if exchange == "Binance Futures":
+                if exchange == "Binancefutures":
                     if symbol not in self.binance_f.contracts:
                         continue
 

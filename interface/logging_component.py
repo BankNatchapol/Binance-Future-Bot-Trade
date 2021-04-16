@@ -8,7 +8,7 @@ class Logging(tk.Frame):
         super().__init__(*args, **kwargs)
         
         self.logging_text = tk.Text(self, height = 10, width = 60, state = tk.DISABLED, 
-                                    bg = BG_COLOR, fg = FG_COLOR2, font = GLOBAL_FONT)
+                                    bg = BG_COLOR, fg = FG_COLOR2, font = GLOBAL_FONT, highlightthickness = False)
         self.logging_text.pack(side = tk.TOP)
     
     def add_log(self, message: str):
