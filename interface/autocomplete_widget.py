@@ -26,27 +26,27 @@ class Autocomplete(tk.Entry):
             if self._lb_open:
                 self._lb.destroy()
                 self._lb_open = False
-
-        if not self._lb_open:
-            self._lb = tk.Listbox(height = 8)
-            self._lb.place(x = self.winfo_x() + self.winfo_width() + 26, y = self.winfo_y() + self.winfo_height())
-
-            self._lb_open = True
-
-        symbols_matched = [symbol for symbol in self._symbols if symbol.startswith(self._var.get())]
-
-        if len(symbols_matched) > 0:
-            try:
-                self._lb.delete(0, tk.END)
-            except tk.TclError:
-                pass
-            for symbol in symbols_matched:
-                self._lb.insert(tk.END, symbol)
-
         else:
-            if self._lb_open:
-                self._lb.destroy()
-                self._lb_open = False
+            if not self._lb_open:
+                self._lb = tk.Listbox(height = 8)
+                self._lb.place(x = self.winfo_x() + self.winfo_width() * 2 - 29 , y = self.winfo_y() + self.winfo_height())
+
+                self._lb_open = True
+
+            symbols_matched = [symbol for symbol in self._symbols if symbol.startswith(self._var.get())]
+
+            if len(symbols_matched) > 0:
+                try:
+                    self._lb.delete(0, tk.END)
+                except tk.TclError:
+                    pass
+                for symbol in symbols_matched:
+                    self._lb.insert(tk.END, symbol)
+
+            else:
+                if self._lb_open:
+                    self._lb.destroy()
+                    self._lb_open = False
     
     def _select(self, event: tk.Event):
         if self._lb_open:
