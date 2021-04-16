@@ -34,7 +34,3 @@ if __name__ == "__main__":
     root = Root(binance_f)
 
     root.mainloop()
-
-    binance_f._break_point = True
-    binance_f._ws.close()
-

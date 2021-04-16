@@ -22,7 +22,7 @@ class Root(tk.Tk):
         self.binance_f = binance_f
 
         self.title("Trading Bot")
-        self.protocol("WH_DELETE_WINDOW", self._ask_before_close)
+        self.protocol("WM_DELETE_WINDOW", self._ask_before_close)
 
         self.configure(bg = BG_COLOR)
 
@@ -47,7 +47,12 @@ class Root(tk.Tk):
         self._update_ui()
 
     def _ask_before_close(self):
+        result = askquestion("Confirmation", "Do you want to exit the application?")
+        if result == "yes":
+            self.binance_f.reconnect = False
+            self.binance_f.ws.close()
 
+            self.destroy()
 
     def _update_ui(self):
         for log in self.binance_f.logs:
