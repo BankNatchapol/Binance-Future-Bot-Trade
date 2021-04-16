@@ -4,6 +4,7 @@ import typing
 
 from models import *
 from interface.styling import *
+from interface.autocomplete_widget import *
 
 class WatchList(tk.Frame):
     def __init__(self, binance_contracts: typing.Dict[str, Contract], *args, **kwargs):
@@ -20,7 +21,7 @@ class WatchList(tk.Frame):
         self._binance_f_label = tk.Label(self._commands_frame, text = "Binancefutures", bg = BG_COLOR, fg = FG_COLOR, font = BOLD_FONT)
         self._binance_f_label.grid(row = 0, column = 0)
 
-        self._binance_f_entry = tk.Entry(self._commands_frame, fg = FG_COLOR, justify = tk.CENTER, insertbackground = FG_COLOR, bg = BG_COLOR2, highlightthickness = False)
+        self._binance_f_entry = Autocomplete(self.binance_symbols, self._commands_frame, fg = FG_COLOR, justify = tk.CENTER, insertbackground = FG_COLOR, bg = BG_COLOR2, highlightthickness = False)
         self._binance_f_entry.bind("<Return>", self._add_binance_f_symbol)
         self._binance_f_entry.grid(row = 1, column = 0)
         

@@ -16,7 +16,7 @@ def check_float_format(text: str):
     if text == "":
         return True
     
-    if all(x in "0123456789" for x in text) and text.count(".") <= 1:
+    if all(x in "0123456789." for x in text) and text.count(".") <= 1:
         try:
             int(text)
             return True

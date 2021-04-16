@@ -5,6 +5,7 @@ import typing
 from interface.styling import *
 
 from connectors.binance_futures import BinanceFuturesClient
+from utils import *
 
 from strategies import TechnicalStrategy, BreakoutStrategy
 
@@ -13,6 +14,9 @@ class StrategyEditor(tk.Frame):
         super().__init__(*args, **kwargs)
 
         self.root = root
+
+        self._valid_integer = self.register(check_integer_format)
+        self._valid_float = self.register(check_float_format)
 
         self._exchanges = {"Binancefutures": binance_f}
 
@@ -93,6 +97,12 @@ class StrategyEditor(tk.Frame):
            
             elif base_param['widget'] == tk.Entry:
                 self.body_widgets[code_name][b_index] = tk.Entry(self._table_frame, justify = tk.CENTER, highlightthickness = False, width = base_param['width'])
+
+                if base_param['data_type'] == int:
+                    self.body_widgets[code_name][b_index].config(validate = "key", validatecommand = (self._valid_integer, "%P"))
+                elif base_param['data_type'] == float:
+                    self.body_widgets[code_name][b_index].config(validate = "key", validatecommand = (self._valid_float, "%P"))
+
             elif base_param['widget'] == tk.Button:
                 self.body_widgets[code_name][b_index] = tkmac.Button(self._table_frame, text = base_param['text'], 
                                                                 bg = base_param['bg'], fg = FG_COLOR, borderless = True,
@@ -135,8 +145,16 @@ class StrategyEditor(tk.Frame):
 
             if param['widget'] == tk.Entry:
                 self._extra_input[code_name] = tk.Entry(self._popup_window, bg = BG_COLOR2, justify = tk.CENTER, fg = FG_COLOR, insertbackground = FG_COLOR, highlightthickness = False)
+                
+                if param['data_type'] == int:
+                    self._extra_input[code_name].config(validate = "key", validatecommand = (self._valid_integer, "%P"))
+                elif param['data_type'] == float:
+                    self._extra_input[code_name].config(validate = "key", validatecommand = (self._valid_float, "%P"))
+
                 if self._additional_parameters[b_index][code_name] is not None:
                     self._extra_input[code_name].insert(tk.END, str(self._additional_parameters[b_index][code_name]))
+
+                
             else:
                 continue
 
