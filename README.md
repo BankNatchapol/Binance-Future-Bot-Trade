@@ -25,16 +25,21 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
-    <li><a href="#dataset">Dataset</a>
-        <ul>
-        <li><a href="#event-dataset">Event Dataset</a></li>
+    <li>
+        <a href="#app-gui">App GUI</a>
+    </li>
+    <li>
+      <a href="#installation">Installation</a>
+      <ul>
+        <li><a href="#create-virtualenv">Create virtualenv</a></li>
+        <li><a href="#install-package">Install package</a></li>
       </ul>
     </li>
-<li>
-      <a href="#getting-started">Getting Started</a>
+    <li>
+      <a href="#start-program">Start Program</a>
       <ul>
-        <li><a href="#installation">Installation</a></li>
-        <li><a href="#etl-processes">ETL Processes</a></li>
+        <li><a href="#mac">Mac</a></li>
+        <li><a href="#window">Window</a></li>
       </ul>
     </li>
     <li><a href="#contact">Contact</a></li>
@@ -51,13 +56,15 @@ In this project i use TKinter to create GUI.
 ## App GUI
 <img src="./images/app_ui.png"/>
 
+<!-- INSTALLATION -->
 ## Installation
 ### Create virtualenv 
 > virtualenv bfbt\
-### install package 
+### Install package 
 > pip install - requirements.txt
 
-## start program
+<!-- START PROGRAM -->
+## Start Program
 ### Mac
 > ./start.command
 
