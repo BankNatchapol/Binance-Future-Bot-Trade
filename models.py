@@ -8,7 +8,7 @@ class Balance:
 
 class Candle:
     def __init__(self, candle_info, timeframe, exchange):
-        if exchange == "Binancefutures":       
+        if exchange == "Binance":       
             self.timestamp = float(candle_info[0])
             self.open = float(candle_info[1])
             self.high = float(candle_info[2])
@@ -26,7 +26,7 @@ class Candle:
 
 class Contract:
     def __init__(self, contract_info, exchange):
-        if exchange == "Binancefutures":
+        if exchange == "Binance":
             self.symbol = contract_info['symbol']
             self.base_asset = contract_info['baseAsset']
             self.quote_asset = contract_info['quoteAsset']
@@ -39,7 +39,7 @@ class Contract:
 
 class OrderStatus:
     def __init__(self, order_info, exchange):
-        if exchange == "Binancefutures":
+        if exchange == "Binance":
             self.order_id = order_info['orderId']
             self.status = order_info['status'].lower()
             self.avg_price = float(order_info['avgPrice'])

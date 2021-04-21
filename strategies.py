@@ -10,7 +10,7 @@ import pandas as pd
 from models import *
 
 if typing.TYPE_CHECKING: 
-    from connectors.binance_futures import BinanceFuturesClient
+    from connectors.binance import BinanceClient
 logger = logging.getLogger()
 
 TF_EQUIV = {"1m": 60, "5m": 300, "15m": 900, "1h": 3600, "4h": 14400}
@@ -28,7 +28,7 @@ class Trade:
         self.entry_id: Contract = trade_info['entry_id']
         
 class Strategy:
-    def __init__(self, client: typing.Union["BinanceFuturesClient"], contract: Contract, exchange:str, timeframe: str, balance_pct: float, take_profit: float, stop_loss: float, strat_name):
+    def __init__(self, client: typing.Union["BinanceClient"], contract: Contract, exchange:str, timeframe: str, balance_pct: float, take_profit: float, stop_loss: float, strat_name):
         self.client = client
 
         self.contract = contract

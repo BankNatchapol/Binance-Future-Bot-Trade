@@ -2,7 +2,7 @@ import tkinter as tk
 import logging
 import pprint
 
-from connectors.binance_futures import BinanceFuturesClient
+from connectors.binance import BinanceClient
 
 from interface.root_component import Root
 
@@ -29,8 +29,8 @@ logger.addHandler(stream_handler)
 
 if __name__ == "__main__":
 
-    binance_f = BinanceFuturesClient(PUBLIC_KEY, SECRET_KEY, True)
+    binance = BinanceClient(PUBLIC_KEY, SECRET_KEY, True)
     
-    root = Root(binance_f)
+    root = Root(binance)
 
     root.mainloop()

@@ -8,11 +8,11 @@ from interface.autocomplete_widget import *
 from interface.scrollable_frame import *
 
 class WatchList(tk.Frame):
-    def __init__(self, binance_f: typing.Dict[str, Contract], 
+    def __init__(self, binance: typing.Dict[str, Contract], 
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.binance_f_symbols = list(binance_f.keys())
+        self.binance_symbols = list(binance.keys())
 
         self._commands_frame = tk.Frame(self, bg=BG_COLOR)
         self._commands_frame.pack(side=tk.TOP)
@@ -20,13 +20,13 @@ class WatchList(tk.Frame):
         self._table_frame = tk.Frame(self, bg=BG_COLOR)
         self._table_frame.pack(side=tk.TOP)
 
-        self._binance_f_label = tk.Label(self._commands_frame, text="Binancefutures", bg=BG_COLOR, fg=FG_COLOR, font=BOLD_FONT)
-        self._binance_f_label.grid(row=0, column=0)
+        self._binance_label = tk.Label(self._commands_frame, text="Binance", bg=BG_COLOR, fg=FG_COLOR, font=BOLD_FONT)
+        self._binance_label.grid(row=0, column=0)
 
-        self._binance_f_entry = Autocomplete(self.binance_f_symbols, self._commands_frame, fg=FG_COLOR, justify=tk.CENTER,
+        self._binance_entry = Autocomplete(self.binance_symbols, self._commands_frame, fg=FG_COLOR, justify=tk.CENTER,
                                        insertbackground=FG_COLOR, bg=BG_COLOR2, highlightthickness=False)
-        self._binance_f_entry.bind("<Return>", self._add_binance_f_symbol)
-        self._binance_f_entry.grid(row=1, column=0, padx=5)
+        self._binance_entry.bind("<Return>", self._add_binance_symbol)
+        self._binance_entry.grid(row=1, column=0, padx=5)
 
         self.body_widgets = dict()
 
@@ -69,11 +69,11 @@ class WatchList(tk.Frame):
             self.body_widgets[h][b_index].grid_forget()
             del self.body_widgets[h][b_index]
 
-    def _add_binance_f_symbol(self, event):
+    def _add_binance_symbol(self, event):
         symbol = event.widget.get()
 
-        if symbol in self.binance_f_symbols:
-            self._add_symbol(symbol, "Binancefutures")
+        if symbol in self.binance_symbols:
+            self._add_symbol(symbol, "Binance")
             event.widget.delete(0, tk.END)
 
     def _add_symbol(self, symbol: str, exchange: str):

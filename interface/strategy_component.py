@@ -7,7 +7,7 @@ import json
 from interface.styling import *
 from interface.scrollable_frame import ScrollableFrame
 
-from connectors.binance_futures import BinanceFuturesClient
+from connectors.binance import BinanceClient
 
 from strategies import TechnicalStrategy, BreakoutStrategy
 from utils import *
@@ -17,7 +17,7 @@ if typing.TYPE_CHECKING:
 
 
 class StrategyEditor(tk.Frame):
-    def __init__(self, root: "Root", binance_f: BinanceFuturesClient, *args, **kwargs):
+    def __init__(self, root: "Root", binance: BinanceClient, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.root = root
@@ -25,7 +25,7 @@ class StrategyEditor(tk.Frame):
         self._valid_integer = self.register(check_integer_format)
         self._valid_float = self.register(check_float_format)
 
-        self._exchanges = {"Binancefutures": binance_f}
+        self._exchanges = {"Binance": binance}
 
         self._all_contracts = []
         self._all_timeframes = ["1m", "5m", "15m", "30m", "1h", "4h"]
@@ -301,7 +301,7 @@ class StrategyEditor(tk.Frame):
                 self.root.logging_frame.add_log(f"No historical data retrieved for {contract.symbol}")
                 return
 
-            if exchange == "Binancefutures":
+            if exchange == "Binance":
                 self._exchanges[exchange].subscribe_channel([contract], "aggTrade")
 
             self._exchanges[exchange].strategies[b_index] = new_strategy

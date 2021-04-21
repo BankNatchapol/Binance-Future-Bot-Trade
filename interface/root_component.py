@@ -3,7 +3,7 @@ from tkinter.messagebox import askquestion
 
 import time 
 
-from connectors.binance_futures import BinanceFuturesClient
+from connectors.binance import BinanceClient
 
 from interface.styling import *
 from interface.logging_component import Logging
@@ -16,10 +16,10 @@ import logging
 logger = logging.getLogger()
 
 class Root(tk.Tk):
-    def __init__(self, binance_f: BinanceFuturesClient):
+    def __init__(self, binance: BinanceClient):
         super().__init__()
 
-        self.binance_f = binance_f
+        self.binance = binance
 
         self.title("Trading Bot")
         self.protocol("WM_DELETE_WINDOW", self._ask_before_close)
@@ -32,13 +32,13 @@ class Root(tk.Tk):
         self._right_frame = tk.Frame(self, bg = BG_COLOR)
         self._right_frame.pack(side = tk.RIGHT)
 
-        self._watchlist_frame = WatchList(self.binance_f.contracts, self._left_frame, bg = BG_COLOR)
+        self._watchlist_frame = WatchList(self.binance.contracts, self._left_frame, bg = BG_COLOR)
         self._watchlist_frame.pack(side = tk.TOP)
 
         self.logging_frame = Logging(self._left_frame, bg = BG_COLOR)
         self.logging_frame.pack(side = tk.TOP)
 
-        self._strategy_frame = StrategyEditor(self, self.binance_f, self._right_frame, bg = BG_COLOR)
+        self._strategy_frame = StrategyEditor(self, self.binance, self._right_frame, bg = BG_COLOR)
         self._strategy_frame.pack(side = tk.TOP)
 
         self._trades_frame = TradesWatch(self._right_frame, bg = BG_COLOR)
@@ -49,18 +49,18 @@ class Root(tk.Tk):
     def _ask_before_close(self):
         result = askquestion("Confirmation", "Do you want to exit the application?")
         if result == "yes":
-            self.binance_f.reconnect = False
-            self.binance_f.ws.close()
+            self.binance.reconnect = False
+            self.binance.ws.close()
 
             self.destroy()
 
     def _update_ui(self):
-        for log in self.binance_f.logs:
+        for log in self.binance.logs:
             if not log['displayed']:
                 self.logging_frame.add_log(log['log'])
                 log['displayed'] = True
 
-        for client in [self.binance_f]:
+        for client in [self.binance]:
             try: 
                 for b_index, strat in client.strategies.items():
                     for log in strat.logs:
@@ -70,7 +70,7 @@ class Root(tk.Tk):
                         if trade.time not in self._trades_frame.body_widgets['symbol']:
                             self._trades_frame.add_trade(trade)
                         
-                        if trade.contract.exchange == "Binancefutures":
+                        if trade.contract.exchange == "Binance":
                             precision = trade.contract.price_decimals 
                         else:
                             precision = 8
@@ -87,16 +87,16 @@ class Root(tk.Tk):
                 symbol = self._watchlist_frame.body_widgets['symbol'][key].cget("text")
                 exchange = self._watchlist_frame.body_widgets['exchange'][key].cget("text")
 
-                if exchange == "Binancefutures":
-                    if symbol not in self.binance_f.contracts:
+                if exchange == "Binance":
+                    if symbol not in self.binance.contracts:
                         continue
 
-                    if symbol not in self.binance_f.prices:
-                        self.binance_f.get_bid_ask(self.binance_f.contracts[symbol])
+                    if symbol not in self.binance.prices:
+                        self.binance.get_bid_ask(self.binance.contracts[symbol])
                         continue
                     
-                    precision = self.binance_f.contracts[symbol].price_decimals
-                    prices = self.binance_f.prices[symbol]
+                    precision = self.binance.contracts[symbol].price_decimals
+                    prices = self.binance.prices[symbol]
                 else:
                     continue
 

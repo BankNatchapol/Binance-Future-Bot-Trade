@@ -20,7 +20,7 @@ from models import *
 
 logger = logging.getLogger()
 
-class BinanceFuturesClient:
+class BinanceClient:
     def __init__(self, public_key: str, secret_key: str, testnet: bool):
         if testnet:
             self._base_url = "https://testnet.binancefuture.com"
@@ -49,7 +49,7 @@ class BinanceFuturesClient:
         t = threading.Thread(target = self._start_ws)
         t.start()
 
-        logger.info("Binance Futures Client successfully initialized.")
+        logger.info("Binance Client successfully initialized.")
     
     def _add_log(self, msg: str):
         logger.info("%s", msg)
@@ -96,7 +96,7 @@ class BinanceFuturesClient:
         
         if exchange_info is not None:
             for contract_data in exchange_info['symbols']:
-                contracts[contract_data['symbol']] = Contract(contract_data, "Binancefutures")
+                contracts[contract_data['symbol']] = Contract(contract_data, "Binance")
 
         return contracts
 
@@ -112,7 +112,7 @@ class BinanceFuturesClient:
         
         if raw_candles is not None:
             for c in raw_candles:
-                candles.append(Candle(c, interval, "Binancefutures"))
+                candles.append(Candle(c, interval, "Binance"))
         
         return candles 
     
@@ -163,7 +163,7 @@ class BinanceFuturesClient:
         order_status = self._make_request("POST", "/fapi/v1/order", data)
         
         if order_status is not None:
-            order_status = OrderStatus(order_status, "Binancefutures")     
+            order_status = OrderStatus(order_status, "Binance")     
 
         return order_status
     
@@ -178,7 +178,7 @@ class BinanceFuturesClient:
         order_status = self._make_request("DELETE", "/fapi/v1/order", data)
         
         if order_status is not None:
-            order_status = OrderStatus(order_status, "Binancefutures")
+            order_status = OrderStatus(order_status, "Binance")
 
         return order_status
  
@@ -192,7 +192,7 @@ class BinanceFuturesClient:
         order_status = self._make_request("GET", "/fapi/v1/order", data)
         
         if order_status is not None:
-            order_status = OrderStatus(order_status, "Binancefutures")
+            order_status = OrderStatus(order_status, "Binance")
 
         return order_status
     
@@ -249,7 +249,7 @@ class BinanceFuturesClient:
                                         trade.pnl = (trade.entry_price - self.prices[symbol]['ask']) * trade.quantity
 
                 except RuntimeError as e:
-                    logger.error("Error while looping through the Binance Futures strategies: %s", e)
+                    logger.error("Error while looping through the Binance strategies: %s", e)
 
             elif data['e'] == "aggTrade":
                 symbol = data['s']
@@ -293,7 +293,7 @@ class BinanceFuturesClient:
 
         trade_size = round(round(trade_size / contract.lot_size) * contract.lot_size, 8)
 
-        logger.info("Binance Futures current USDT balance = %s, trade size = %s", balance, trade_size)
+        logger.info("Binance current USDT balance = %s, trade size = %s", balance, trade_size)
 
         return trade_size
     
