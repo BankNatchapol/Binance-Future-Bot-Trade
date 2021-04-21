@@ -51,27 +51,25 @@ In this project i use TKinter to create GUI.
 ## App GUI
 <img src="./images/app_ui.png"/>
 
-### Data Model
-This is my database Star Schema.
-<img src="./images/DataModel.jpeg"/>
-<!-- GETTING STARTED -->
-## Getting Started
-
-### Installation
-install package with requirements.txt
+## Installation
+### Create virtualenv 
+> virtualenv bfbt\
+### install package 
 > pip install - requirements.txt
 
-### ETL Processes
-- run python create_keyspace.py to create keyspace
-- run python etl.py to do ETL
-- watch results in test.ipynb
+## start program
+### Mac
+> ./start.command
+
+### Window
+> ./start.bat
 
 <!-- CONTACT -->
 ## Contact
 
 Facebook - [@Natchapol Patamawisut](https://www.facebook.com/natchapol.patamawisut/)
 
-Project Link: [https://github.com/BankNatchapol/ETL-Apache-Cassandra](https://github.com/BankNatchapol/ETL-Apache-Cassandra)
+Project Link: [https://github.com/BankNatchapol/Binance-Future-Bot-Trade](https://github.com/BankNatchapol/Binance-Future-Bot-Trade)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
