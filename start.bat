@@ -1,0 +1,1 @@
+bfbt\Scripts\python.exe main.py 
