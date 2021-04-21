@@ -7,10 +7,14 @@ from interface.styling import *
 from interface.autocomplete_widget import *
 from interface.scrollable_frame import *
 
+from database import WorkspaceData
+
 class WatchList(tk.Frame):
     def __init__(self, binance: typing.Dict[str, Contract], 
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.db = WorkspaceData()
 
         self.binance_symbols = list(binance.keys())
 
@@ -62,6 +66,11 @@ class WatchList(tk.Frame):
                 self.body_widgets[h + "_var"] = dict()
 
         self._body_index = 0
+
+        saved_symbols = self.db.get("watchlist")
+    
+        for s in saved_symbols:
+            self._add_symbol(s['symbol'], s['exchange'])
 
     def _remove_symbol(self, b_index: int):
 

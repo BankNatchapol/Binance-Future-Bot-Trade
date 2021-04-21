@@ -1,6 +1,5 @@
 import tkinter as tk
 import typing
-import tkmacosx as tkmac
 
 import json
 
@@ -12,6 +11,8 @@ from connectors.binance import BinanceClient
 from strategies import TechnicalStrategy, BreakoutStrategy
 from utils import *
 
+from database import WorkspaceData
+
 if typing.TYPE_CHECKING:
     from interface.root_component import Root
 
@@ -21,6 +22,8 @@ class StrategyEditor(tk.Frame):
         super().__init__(*args, **kwargs)
 
         self.root = root
+
+        self.db = WorkspaceData()
 
         self._valid_integer = self.register(check_integer_format)
         self._valid_float = self.register(check_float_format)
@@ -107,6 +110,8 @@ class StrategyEditor(tk.Frame):
 
         self._body_index = 0
 
+        self._load_workspace()
+
     def _add_strategy_row(self):
 
         """
@@ -157,9 +162,8 @@ class StrategyEditor(tk.Frame):
         for strat, params in self.extra_params.items():
             for param in params:
                 self.additional_parameters[b_index][param['code_name']] = None
-
         self._body_index += 1
-
+        # print(self.body_widgets[0])
     def _delete_row(self, b_index: int):
 
         """
@@ -326,3 +330,30 @@ class StrategyEditor(tk.Frame):
 
             self.body_widgets['activation'][b_index].config(bg="darkred", text="OFF")
             self.root.logging_frame.add_log(f"{strat_selected} strategy on {symbol} / {timeframe} stopped")
+
+    def _load_workspace(self):  
+        """
+        Add the rows and fill them with data saved in the database
+        :return:
+        """
+
+        data = self.db.get("strategies")
+
+        for row in data:
+            self._add_strategy_row()
+
+            b_index = self._body_index - 1  # -1 to select the row that was just added
+
+            for base_param in self._base_params:
+                code_name = base_param['code_name']
+                if base_param['widget'] == tk.OptionMenu and row[code_name] is not None:
+                    self.body_widgets[code_name + "_var"][b_index].set(row[code_name])
+                elif base_param['widget'] == tk.Entry and row[code_name] is not None:              
+                    self.body_widgets[code_name][b_index].insert(tk.END, row[code_name])
+
+
+            extra_params = json.loads(row['extra_params'])
+                
+            for param, value in extra_params.items():
+                if value is not None:
+                    self.additional_parameters[b_index][param] = value

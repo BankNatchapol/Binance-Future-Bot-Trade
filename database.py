@@ -11,12 +11,12 @@ class WorkspaceData:
         self.cursor.execute("CREATE TABLE IF NOT EXISTS strategies (strategy_type TEXT, contract TEXT," 
                             "timeframe TEXT, balance_pct REAL, take_profit REAL, stop_loss REAL, extra_params TEXT)")
         
-        self.comm.commit()
+        self.conn.commit()
 
     def save(self, table: str, data: typing.List[typing.Tuple]):
-        self.cursor.execure(f"DELETE FROM {table}")
+        self.cursor.execute(f"DELETE FROM {table}")
 
-        table_data = self.cursor.execute("SELECT * FROM {table}")
+        table_data = self.cursor.execute(f"SELECT * FROM {table}")
         
         columns = [description[0] for description in table_data.description]
 
