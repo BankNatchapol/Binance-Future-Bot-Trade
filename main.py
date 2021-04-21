@@ -29,7 +29,7 @@ logger.addHandler(stream_handler)
 
 if __name__ == "__main__":
 
-    binance = BinanceClient(BINANCE_SPOT_PUBLIC_KEY, BINANCE_SPOT_SECRET_KEY, False, False)
+    binance = BinanceClient(BINANCE_SPOT_PUBLIC_KEY, BINANCE_SPOT_SECRET_KEY, testnet = True, futures = True)
     
     root = Root(binance)
 
